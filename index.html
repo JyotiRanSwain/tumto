@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tomato King - Premium Flavors</title>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    /* Reset & Core Styling */
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:"Poppins",sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      overflow-x:hidden;
+      background: linear-gradient(135deg, #0a0f0d, #161e1a, #070a09);
+      color:#fff;
+      display:flex;
+    }
+
+    /* Full-Screen Video Background */
+    .video-bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      overflow: hidden;
+    }
+
+    .video-bg-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, rgba(10, 15, 13, 0.85), rgba(22, 30, 26, 0.9));
+      z-index: -1;
+    }
+
+    /* Ambient Glow Effects */
+    .bg-glow{
+      position:fixed;
+      width:600px;
+      height:600px;
+      border-radius:50%;
+      filter:blur(160px);
+      opacity:.25;
+      z-index:-1;
+    }
+    .bg-glow.one{
+      background:#e63946;
+      top:-150px;
+      left:-100px;
+    }
+    .bg-glow.two{
+      background:#ffb703;
+      bottom:-200px;
+      right:-100px;
+    }
+
+    /* Sidebar - Desktop Layout (Fixed Left) */
+    .sidebar{
+      position:fixed;
+      left:25px;
+      top:50%;
+      transform:translateY(-50%);
+      width:68px;
+      padding:24px 0;
+      border-radius:30px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:22px;
+      background:rgba(255, 255, 255, .03);
+      backdrop-filter:blur(30px);
+      -webkit-backdrop-filter:blur(30px);
+      border:1px solid rgba(255, 255, 255, .05);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.6),
+        0 0 40px rgba(230, 57, 70, .08);
+      z-index:999;
+    }
+
+    .logo{
+      width:44px;
+      height:44px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      border-radius:50%;
+      background:linear-gradient(135deg, #e63946, #ffb703);
+      margin-bottom:12px;
+      box-shadow:0 0 20px rgba(230, 57, 70, .4);
+    }
+
+    .sidebar a{
+      width:44px;
+      height:44px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-decoration:none;
+      color:#e0e0e0;
+      font-size:18px;
+      border-radius:14px;
+      transition:.4s ease;
+      position:relative;
+    }
+
+    .sidebar a.active {
+      background:rgba(230, 57, 70, .2);
+      color:#ffb703;
+      border: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .sidebar a:hover{
+      background:rgba(230, 57, 70, .15);
+      color:#ffb703;
+      transform:scale(1.1);
+      box-shadow:0 10px 25px rgba(230, 57, 70, .2);
+    }
+
+    /* Main Container Content */
+    .main{
+      margin-left:110px;
+      width:100%;
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
+
+    /* Top Navigation Header */
+    .topbar{
+      height:90px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 55px;
+    }
+
+    .nav-links{
+      display:flex;
+      gap:35px;
+    }
+
+    .nav-links a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:500;
+      position:relative;
+      transition: color .3s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: #ffb703;
+    }
+
+    .nav-links a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-6px;
+      width:0;
+      height:2px;
+      background:#ffb703;
+      transition:.3s;
+    }
+
+    .nav-links a:hover::after, .nav-links a.active::after{
+      width:100%;
+    }
+
+    .buy-btn{
+      padding:12px 26px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+      backdrop-filter:blur(10px);
+      color:#fff;
+      font-weight: 600;
+      cursor:pointer;
+      transition:.3s;
+    }
+
+    .buy-btn:hover{
+      background:linear-gradient(135deg, #e63946, #ffb703);
+      box-shadow:0 10px 30px rgba(230, 57, 70, .35);
+      border-color: transparent;
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 40px 75px;
+    }
+
+    .hero-content {
+      max-width: 650px;
+    }
+
+    .tagline {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffb703;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tagline::after {
+      content: "";
+      width: 40px;
+      height: 2px;
+      background: #ffb703;
+    }
+
+    .hero-content h1 {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 25px;
+    }
+
+    .hero-content h1 span {
+      background: linear-gradient(135deg, #e63946, #ffb703);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-content p {
+      color: #cccccc;
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 35px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .btn-primary {
+      padding: 16px 36px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #e63946, #ffb703);
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: .3s;
+      box-shadow: 0 10px 30px rgba(230, 57, 70, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(230, 57, 70, 0.35);
+    }
+
+    .btn-secondary {
+      padding: 16px 36px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: .3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Responsive / Mobile Rules */
+    @media(max-width:768px){
+      body{
+        flex-direction:column;
+      }
+
+      /* Fixed bar anchoring on the bottom for convenient mobile navigation */
+      .sidebar{
+        position:fixed;
+        bottom:15px;
+        top:auto;
+        left:50%;
+        transform:translateX(-50%);
+        width:90%;
+        max-width: 400px;
+        height:70px;
+        flex-direction:row;
+        justify-content: space-around;
+        padding:0 15px;
+        gap:0;
+        border-radius: 24px;
+      }
+
+      .logo{
+        display:none; /* Hide crown-logo on small mobile menus to save space */
+      }
+
+      .main{
+        margin-left:0;
+        padding-bottom:100px; /* Space so content isn't blocked by fixed mobile bar */
+      }
+
+      .topbar{
+        padding:20px;
+      }
+
+      .nav-links{
+        display:none; /* Side menu takes over page routes on Mobile */
+      }
+
+      .hero-container {
+        padding: 40px 24px;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .tagline {
+        justify-content: center;
+      }
+
+      .hero-content h1 {
+        font-size: 42px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Full-Screen Video/Poster Element -->
+  <div class="video-bg-container">
+    <video src="videos/sauce-banner.mp4" autoplay loop muted playsinline poster="images/sauce-poster.svg">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div class="video-overlay"></div>
+
+  <!-- Ambient Glow Layers -->
+  <div class="bg-glow one"></div>
+  <div class="bg-glow two"></div>
+
+  <!-- Sidebar Navigation Menu -->
+  <aside class="sidebar">
+    <div class="logo">🍅</div>
+    <a href="index.html" class="active"><i class="fa-solid fa-house"></i></a>
+    <a href="products.html"><i class="fa-solid fa-store"></i></a>
+    <a href="recipes.html"><i class="fa-solid fa-bowl-food"></i></a>
+    <a href="about.html"><i class="fa-solid fa-book-open"></i></a>
+    <a href="contact.html"><i class="fa-solid fa-phone"></i></a>
+  </aside>
+
+  <!-- Main Showcase Container -->
+  <main class="main">
+    <header class="topbar">
+      <!-- Desktop Header Navigation links -->
+      <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="products.html">Products</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <button class="buy-btn" onclick="window.location.href='products.html'">Buy Now</button>
+    </header>
+
+    <!-- Content Showcase Grid -->
+    <section class="hero-container">
+      <div class="hero-content">
+        <div class="tagline">Experience Royalty</div>
+        <h1>Pure, Sun-Ripened <span>Tomato King</span> Sauces</h1>
+        <p>Crafted organically with hand-selected premium tomatoes and complex local Indian seasonings. No cheap thickeners, artificial food color, or preservatives. Just absolute luxury in every dip.</p>
+        
+        <div class="cta-buttons">
+          <a href="products.html" class="btn-primary">Explore Products</a>
+          <a href="recipes.html" class="btn-secondary">View Recipes</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>
